@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M-PESA STK Push Tester</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            background: #f3f6fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .payment-card {
+            max-width: 520px;
+            margin: 65px auto;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,.08);
+        }
+
+        .brand {
+            color: #159447;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .pay-button {
+            background: #159447;
+            border: none;
+            padding: 13px;
+            font-weight: 600;
+        }
+
+        .pay-button:hover {
+            background: #107738;
+        }
+
+        .form-control {
+            padding: 12px;
+        }
+
+        .status-box {
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card payment-card">
+        <div class="card-body p-4 p-md-5">
+
+            <div class="text-center mb-4">
+                <h2 class="brand">M-PESA</h2>
+                <h5>STK Push Testing Portal</h5>
+                <p class="text-muted small">
+                    Safaricom Daraja Sandbox Integration
+                </p>
+                <span class="badge bg-warning text-dark">
+                    SANDBOX ENVIRONMENT
+                </span>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" action="{% url 'mpesa:test_payment' %}">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input
+                        type="tel"
+                        name="phone"
+                        class="form-control"
+                        placeholder="0712345678"
+                        value="{{ phone|default:'' }}"
+                        required
+                    >
+                    <small class="text-muted">
+                        Enter a Kenyan Safaricom number.
+                    </small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Amount (KES)</label>
+                    <input
+                        type="number"
+                        name="amount"
+                        class="form-control"
+                        placeholder="1"
+                        min="1"
+                        step="1"
+                        value="{{ amount|default:'1' }}"
+                        required
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Account Reference</label>
+                    <input
+                        type="text"
+                        name="reference"
+                        class="form-control"
+                        value="HPDS-TEST"
+                        maxlength="12"
+                        required
+                    >
+                </div>
+
+                <button type="submit"
+                        class="btn btn-success pay-button w-100">
+                    Initiate STK Push
+                </button>
+            </form>
+
+            {% if result %}
+                <hr class="my-4">
+
+                <div class="status-box">
+                    <h6>Daraja API Response</h6>
+
+                    {% if accepted %}
+                        <div class="alert alert-success">
+                            <strong>STK request accepted.</strong>
+                            Check the customer's phone for the payment prompt.
+                            This does not yet confirm payment.
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <strong>STK request was not accepted.</strong>
+                            Review the response below.
+                        </div>
+                    {% endif %}
+
+                    <pre class="bg-light p-3 rounded small">{{ result }}</pre>
+                </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    Developed by HPDS-Powered by Django & Safaricom Daraja API
+                </small>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
