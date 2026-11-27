@@ -15,9 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+
 from django.contrib import admin
 from django.urls import path, include
 from mpesa import views
+
+# M-PESA Gateway Administration Branding
+admin.site.site_header = "M-PESA Gateway | Administration"
+admin.site.site_title = "M-PESA Gateway Admin"
+admin.site.index_title = "Payment Gateway Management"
 
 urlpatterns = [
     path("", views.home, name="home"),
