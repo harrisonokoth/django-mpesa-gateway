@@ -434,12 +434,25 @@
 </main>
 
 <footer class="footer">
+    <div class="mb-3">
+        <a href="{% url 'home' %}" class="btn btn-outline-success btn-sm px-4">
+            ← Back to Home
+        </a>
+
+        <a href="{% url 'mpesa:transaction_list' %}"
+           class="btn btn-outline-secondary btn-sm px-4 ms-2">
+            View Transactions
+        </a>
+    </div>
+
     <div>
         Developed by <strong>Harry Porter Digital Services (HPDS)</strong>
     </div>
+
     <div class="mt-1">
         Powered by Django &amp; Safaricom Daraja API
     </div>
+
     <div class="mt-2">
         Sandbox testing only. No real funds should be used.
     </div>
